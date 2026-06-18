@@ -68,17 +68,7 @@ As cores utilizadas no design do sistema foram extraidas do tema da cafeteria, r
 
 ### Backend
 
-| Tecno<h3>Tela de Login</h3>
-<img src="teladelogin.png" width="800">
-
-<h3>Dashboard</h3>
-<img src="dashboard.png" width="800">
-
-<h3>Listagem de Produtos</h3>
-<img src="listadeprodutos.png" width="800">
-
-<h3>Estoque / Movimentações</h3>
-<img src="estoque.png" width="800">logia | Versao | Finalidade |
+| Tecnologia | Versao | Finalidade |
 |---|---|---|
 | Java | 21 | Linguagem principal |
 | Spring Boot | 3.3.0 | Framework web |
