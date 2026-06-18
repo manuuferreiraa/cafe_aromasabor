@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Café Aroma &amp; Sabor</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="login">
+    <div class="login-box">
+
+        <!-- Lado esquerdo com imagem de café -->
+        <div class="login-left"></div>
+
+        <!-- Lado direito com formulário -->
+        <div class="login-right">
+            <h1>Café Aroma &amp; Sabor</h1>
+            <h2>Login</h2>
+
+            <!-- Mensagem de erro caso login inválido (Spring Security redireciona com ?error) -->
+            <div th:if="${param.error}" class="alert-erro">
+                <p>Usuário ou senha inválidos!</p>
+            </div>
+
+            <!-- Mensagem de sucesso ao fazer logout -->
+            <div th:if="${param.logout}" class="alert-sucesso">
+                <p>Logout realizado com sucesso!</p>
+            </div>
+
+            <!-- Formulário de login: action DEVE ser /login e method POST (exigido pelo Spring Security) -->
+            <form th:action="@{/login}" method="post">
+                <input type="text" id="username" name="username" placeholder="Ex: admin" required/>
+                <input type="password" id="password" name="password" placeholder="Senha" required/>
+                <button type="submit">Entrar</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

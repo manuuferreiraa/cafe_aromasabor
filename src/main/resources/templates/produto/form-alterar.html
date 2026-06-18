@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Produto - Café Aroma &amp; Sabor</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="produtos">
+
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Editar Produto</h1>
+        <div>
+            <span>Bem-vindo, <strong th:text="${usuarioLogado}">Admin</strong></span>
+            <a th:href="@{/produto}" class="btn-secondary">Voltar</a>
+            <a th:href="@{/logout}" class="btn-secondary">Logout</a>
+        </div>
+    </header>
+
+    <section>
+        <h2>Alterar Dados do Produto</h2>
+
+        <!--
+            th:action -> envia o formulário para POST /produto/atualizar
+            th:object -> vincula o objeto 'produto' (já preenchido) ao formulário
+        -->
+        <form th:action="@{/produto/atualizar}" th:object="${produto}" method="post">
+
+            <!-- Campo hidden para manter o ID do produto durante a atualização -->
+            <input type="hidden" th:field="*{id}">
+
+            <!-- Nome -->
+            <div class="form-group">
+                <label>Nome do Produto *</label>
+                <input type="text"
+                       th:field="*{nome}"
+                       required>
+                <span th:if="${#fields.hasErrors('nome')}"
+                      th:errors="*{nome}"
+                      class="erro-campo"></span>
+            </div>
+
+            <!-- Descrição -->
+            <div class="form-group">
+                <label>Descrição</label>
+                <input type="text"
+                       th:field="*{descricao}">
+            </div>
+
+            <!-- Quantidade -->
+            <div class="form-group">
+                <label>Quantidade em Estoque *</label>
+                <input type="number"
+                       th:field="*{quantidade}"
+                       min="0"
+                       required>
+                <span th:if="${#fields.hasErrors('quantidade')}"
+                      th:errors="*{quantidade}"
+                      class="erro-campo"></span>
+            </div>
+
+            <!-- Lote -->
+            <div class="form-group">
+                <label>Lote</label>
+                <input type="text"
+                       th:field="*{lote}">
+            </div>
+
+            <!-- Validade -->
+            <div class="form-group">
+                <label>Data de Validade</label>
+                <input type="date"
+                       th:field="*{validade}">
+            </div>
+
+            <!-- Botões -->
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn-primary">Salvar Alterações</button>
+                <a th:href="@{/produto}" class="btn-secondary">Cancelar</a>
+            </div>
+
+        </form>
+    </section>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Estoque - Café Aroma &amp; Sabor</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="estoque">
+
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Gestão de Estoque</h1>
+        <div>
+            <span>Bem-vindo, <strong th:text="${usuarioLogado}">Admin</strong></span>
+            <a th:href="@{/home}" class="btn-secondary">Voltar</a>
+            <a th:href="@{/logout}" class="btn-secondary">Logout</a>
+        </div>
+    </header>
+
+    <!-- Formulário para registrar movimentação -->
+    <section>
+        <h2>Registrar Movimentação</h2>
+
+        <!-- Mensagem de erro (ex: estoque insuficiente) -->
+        <div th:if="${erro}" class="alert-erro">
+            <p th:text="${erro}"></p>
+        </div>
+
+        <!--
+            th:action -> envia para POST /movimentacao/registrar
+            th:object -> vincula o objeto 'movimentacao' ao formulário
+        -->
+        <form th:action="@{/movimentacao/registrar}" th:object="${movimentacao}" method="post">
+
+            <!-- Select de produto: envia o produtoId separado -->
+            <div class="form-group">
+                <label>Produto *</label>
+                <select name="produtoId" required>
+                    <option value="">Selecionar Produto</option>
+                    <!-- th:each itera sobre a lista de produtos para popular o select -->
+                    <option th:each="produto : ${produtos}"
+                            th:value="${produto.id}"
+                            th:text="${produto.nome}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Select de tipo (ENTRADA ou SAIDA) -->
+            <div class="form-group">
+                <label>Tipo *</label>
+                <select th:field="*{tipo}" required>
+                    <option value="">Selecionar Tipo</option>
+                    <!-- th:each itera sobre os valores do enum TipoMovimentacao -->
+                    <option th:each="tipo : ${tiposMovimentacao}"
+                            th:value="${tipo}"
+                            th:text="${tipo}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Quantidade -->
+            <div class="form-group">
+                <label>Quantidade *</label>
+                <input type="number"
+                       th:field="*{quantidade}"
+                       placeholder="Ex: 10"
+                       min="1"
+                       required>
+            </div>
+
+            <!-- Data da movimentação -->
+            <div class="form-group">
+                <label>Data</label>
+                <input type="date" th:field="*{data}">
+            </div>
+
+            <div style="margin-top: 15px;">
+                <button type="submit" class="btn-primary">Registrar</button>
+            </div>
+
+        </form>
+    </section>
+
+    <!-- Tabela com o resumo de estoque atual por produto -->
+    <section>
+        <h2>Produtos em Estoque</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Lote</th>
+                    <th>Validade</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="produto : ${produtos}">
+                    <td th:text="${produto.nome}"></td>
+                    <td th:text="${produto.lote}"></td>
+                    <td th:text="${produto.validade}"></td>
+                    <td th:text="${produto.quantidade}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(produtos)}">
+                    <td colspan="4" style="text-align:center; color:#888;">
+                        Nenhum produto cadastrado.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Tabela com histórico de movimentações -->
+    <section>
+        <h2>Histórico de Movimentações</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- th:each itera sobre a lista de movimentações -->
+                <tr th:each="mov : ${movimentacoes}">
+                    <td th:text="${mov.id}"></td>
+                    <td th:text="${mov.produto.nome}"></td>
+                    <td th:text="${mov.tipo}"></td>
+                    <td th:text="${mov.quantidade}"></td>
+                    <td th:text="${mov.data}"></td>
+                    <td>
+                        <!-- Link para excluir a movimentação pelo id -->
+                        <a th:href="@{/movimentacao/excluir/{id}(id=${mov.id})}"
+                           class="btn-danger"
+                           onclick="return confirm('Deseja excluir esta movimentação?')">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(movimentacoes)}">
+                    <td colspan="6" style="text-align:center; color:#888;">
+                        Nenhuma movimentação registrada.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+</body>
+</html>

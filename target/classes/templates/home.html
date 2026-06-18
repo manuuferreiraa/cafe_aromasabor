@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Café Aroma &amp; Sabor</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="home">
+
+    <!-- Cabeçalho com nome do sistema e botão de logout -->
+    <header>
+        <h1>Café Aroma &amp; Sabor</h1>
+        <div>
+            <!-- sec:authentication="name" exibe o nome do usuário logado via Spring Security -->
+            <span>
+                Bem-vindo, <strong sec:authentication="name">Usuário</strong>
+            </span>
+            <!-- Logout via Spring Security: usa POST para /logout -->
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="btn-secondary">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Botões do menu principal -->
+    <div class="menu">
+        <a th:href="@{/produto}" class="btn-primary">Cadastro de Produto</a>
+        <a th:href="@{/movimentacao}" class="btn-primary">Gestão de Estoque</a>
+    </div>
+
+    <!-- Resumo do estoque -->
+    <section>
+        <h2>Resumo do Estoque</h2>
+
+        <div class="resumo">
+
+            <!-- Card: Produtos em falta (quantidade = 0) -->
+            <div class="card-resumo">
+                <h3>Produtos em falta</h3>
+                <p th:text="${produtosEmFalta}">0</p>
+            </div>
+
+            <!-- Card: Produtos com validade próxima (nos próximos 30 dias) -->
+            <div class="card-resumo">
+                <h3>Validade próxima</h3>
+                <p th:text="${validadeProxima}">0</p>
+            </div>
+
+            <!-- Card: Total de itens somados em estoque -->
+            <div class="card-resumo">
+                <h3>Total em estoque</h3>
+                <p th:text="${totalEstoque}">0</p>
+            </div>
+
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>

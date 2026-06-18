@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos - Café Aroma &amp; Sabor</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="produtos">
+
+    <!-- Cabeçalho -->
+    <header>
+        <h1>Cadastro de Produtos</h1>
+        <div>
+            <span>Bem-vindo, <strong th:text="${usuarioLogado}">Admin</strong></span>
+            <!-- Botão Voltar redireciona para /home -->
+            <a th:href="@{/home}" class="btn-secondary">Voltar</a>
+            <a th:href="@{/logout}" class="btn-secondary">Logout</a>
+        </div>
+    </header>
+
+    <!-- Busca de produto -->
+    <section>
+        <h2>Buscar Produto</h2>
+        <!-- Formulário de busca: envia o nome para GET /produto/buscar -->
+        <form th:action="@{/produto/buscar}" method="get">
+            <input type="text" name="nome" placeholder="Nome do produto"
+                   th:value="${nomeBusca}">
+            <button type="submit" class="btn-primary">Buscar</button>
+            <a th:href="@{/produto}" class="btn-secondary">Limpar</a>
+        </form>
+    </section>
+
+    <!-- Lista de produtos -->
+    <section>
+        <h2>Lista de Produtos</h2>
+        <!-- Botão para abrir o formulário de cadastro de novo produto -->
+        <div style="margin-bottom: 12px;">
+            <a th:href="@{/produto/form-inserir}" class="btn-primary">+ Novo Produto</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Lote</th>
+                    <th>Validade</th>
+                    <th>Estoque</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- th:each itera sobre a lista de produtos enviada pelo controller -->
+                <tr th:each="produto : ${produtos}">
+                    <td th:text="${produto.id}"></td>
+                    <td th:text="${produto.nome}"></td>
+                    <td th:text="${produto.descricao}"></td>
+                    <td th:text="${produto.lote}"></td>
+                    <td th:text="${produto.validade}"></td>
+                    <td th:text="${produto.quantidade}"></td>
+                    <td>
+                        <!-- Link para o formulário de edição, passando o id -->
+                        <a th:href="@{/produto/form-alterar/{id}(id=${produto.id})}"
+                           class="btn-secondary">Editar</a>
+
+                        <!-- Link para excluir o produto pelo id -->
+                        <a th:href="@{/produto/excluir/{id}(id=${produto.id})}"
+                           class="btn-danger"
+                           onclick="return confirm('Tem certeza que deseja excluir este produto?')">
+                            Excluir
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Mensagem quando não há produtos cadastrados -->
+                <tr th:if="${#lists.isEmpty(produtos)}">
+                    <td colspan="7" style="text-align:center; color:#888;">
+                        Nenhum produto encontrado.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+</body>
+</html>
